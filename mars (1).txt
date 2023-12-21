@@ -1,6 +1,4 @@
 #Stuart Lech 800728996 Slech@siue.edu
-#Mohammad Khan #800657296 mohKhan@siue.edu
-#Jalen Quinn #800726251 jalquin@siue.edu
 .data
 NEWLINE: .asciiz "\n"
 msg_1: .asciiz "Before sorted:\n"
