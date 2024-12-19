@@ -1,0 +1,98 @@
+#Stuart Lech 800728996 Slech@siue.edu
+.data
+NEWLINE: .asciiz "\n"
+msg_1: .asciiz "Before sorted:\n"
+msg_2: .asciiz "After sorted:\n"
+.text
+.globl main #required
+main: #required
+addi $sp, $sp, -120 # make space for 30 ints, 120 bytes on the stack
+li $a0, 0 #set up random number system call. use generator 0
+li $a1, 100 # max random number is 100
+li $v0, 42 # syscall 42 is random number in a range
+syscall # random number is now in $a0
+
+
+
+li $t1, 30
+
+loop:
+sw $a0, 0($sp) # store the number in array location [0]
+addi $t1, $t1, -1
+syscall # random number is now in $a0
+
+addi $sp, $sp, 4
+bne $t1, $zero, loop
+##############################
+
+li $v0, 4 #set up to print a string
+la $a0, msg_1 #la is LOAD ADDRESS. newline is declared
+#at the start of the program
+syscall
+
+addi $sp, $sp, -120
+li $t4, 30
+print1:
+li $v0, 1 #set up to print int
+lw $a0, 0( $sp ) #get the int to print
+syscall
+li $v0, 4 #set up to print a string
+la $a0, NEWLINE #la is LOAD ADDRESS. newline is declared
+#at the start of the program
+syscall
+addi $sp, $sp, 4
+addi $t4, $t4, -1
+bne $t4, $zero, print1
+li $v0, 4 #set up to print a string
+la $a0, NEWLINE #la is LOAD ADDRESS. newline is declared
+#at the start of the program
+syscall
+
+addi $sp, $sp, -120
+li $t2, 29
+sort_1:
+li $t3, 29
+
+sort_2:
+lw $s1, 0($sp)
+lw $s2, 4($sp)
+addi $t3, $t3, -1
+addi $sp, $sp, 4
+bgt $s2, $s1, skip
+sw $s2, -4($sp)
+sw $s1, 0($sp)
+skip:
+bne $t3, $zero, sort_2
+
+addi $sp, $sp, -116
+li $t3, 29
+addi $t2, $t2, -1
+bne $t2, $zero, sort_1
+
+
+li $v0, 4 #set up to print a string
+la $a0, msg_2 #la is LOAD ADDRESS. newline is declared
+#at the start of the program
+syscall
+#now print out the numbers
+
+li $t4, 30
+print:
+li $v0, 1 #set up to print int
+lw $a0, 0( $sp ) #get the int to print
+syscall
+li $v0, 4 #set up to print a string
+la $a0, NEWLINE #la is LOAD ADDRESS. newline is declared
+#at the start of the program
+syscall
+addi $sp, $sp, 4
+addi $t4, $t4, -1
+bne $t4, $zero, print
+
+
+
+
+
+
+li $v0, 10 # last 2 lines are required to make program exit
+syscall
